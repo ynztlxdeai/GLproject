@@ -24,7 +24,7 @@ public class MatrixState {
     //摄像机位置朝向的参数矩阵
     private static float[] mVMatrix    = new float[16];
     //总变换矩阵
-    private static float[] mMVPMatrix;
+    private static float[] mMVPMatrix = new float[16];
     //当前变换矩阵
     private static float[] currMatrix;
     //用于保存变换矩阵的堆栈

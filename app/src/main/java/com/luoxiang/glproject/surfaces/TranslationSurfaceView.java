@@ -3,8 +3,10 @@ package com.luoxiang.glproject.surfaces;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.Matrix;
 import android.util.AttributeSet;
 
+import com.luoxiang.glproject.Constant;
 import com.luoxiang.glproject.domain.Cube;
 import com.luoxiang.glproject.utils.MatrixState;
 
@@ -62,20 +64,47 @@ public class TranslationSurfaceView extends GLSurfaceView {
 
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-
+            //设置背景颜色
+            GLES20.glClearColor(0.5f , 0.5f , 0.5f , 1.0f);
+            mCube = new Cube(TranslationSurfaceView.this);
+            //深度测试
+            GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+            //背面裁剪
+            GLES20.glEnable(GLES20.GL_CULL_FACE);
         }
 
         @Override
         public void onSurfaceChanged(GL10 gl, int width, int height) {
-
+            GLES20.glViewport(0 , 0 , width , height);
+            Constant.ratio = (float)width / height;
+            //透视投影矩阵
+            MatrixState.setProjectFrustum(-Constant.ratio * 0.8f , Constant.ratio * 1.2f , -1 , 1 , 7 , 100);
+            //设置摄像机位置矩阵
+            MatrixState.setCamera(-16f , 8f , 45 , 0f , 0f , 0f , 0f , 1.0f , 0.0f );
+            //初始化矩阵堆栈
+            MatrixState.setInitStack();
         }
 
         @Override
         public void onDrawFrame(GL10 gl) {
             //清楚深度和颜色缓冲
             GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
-            //绘制原来的立方体
 
+            //保护现场
+            MatrixState.pushMatrix();
+            //绘制原来的立方体
+            mCube.drawSelf();
+            //恢复现场
+            MatrixState.popMatrix();
+
+
+            //绘制变换后的立方体
+            MatrixState.pushMatrix();
+            //Ｘ轴移动４
+            MatrixState.translate(4 , 0 , 0);
+            mCube.drawSelf();
+            //恢复现场
+            MatrixState.popMatrix();
         }
     }
 }
