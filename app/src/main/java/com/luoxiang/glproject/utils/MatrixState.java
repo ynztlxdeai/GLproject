@@ -160,4 +160,15 @@ public class MatrixState {
         Matrix.multiplyMM(mMVPMatrix , 0 , mProjMatrix , 0 , mMVPMatrix , 0);
         return mMVPMatrix;
     }
+
+    /**
+     * 旋转
+     * @param angle　角度
+     * @param x　分量
+     * @param y
+     * @param z
+     */
+    public static void rotate(float angle, float x, float y, float z) {
+        Matrix.rotateM(currMatrix , 0 , angle , x , y , z);
+    }
 }
