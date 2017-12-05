@@ -9,3 +9,4 @@
 
 缩放效果如下:
 ![Alt text](screen/scale.png = 108x192)
+<img src="screen/scale.png" width="50%" height="50%" />
