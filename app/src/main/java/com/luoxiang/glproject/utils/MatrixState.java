@@ -171,4 +171,14 @@ public class MatrixState {
     public static void rotate(float angle, float x, float y, float z) {
         Matrix.rotateM(currMatrix , 0 , angle , x , y , z);
     }
+
+    /**
+     * 缩放
+     * @param x
+     * @param y
+     * @param z
+     */
+    public static void scale(float x, float y, float z) {
+        Matrix.scaleM(currMatrix  , 0 , x , y, z);
+    }
 }

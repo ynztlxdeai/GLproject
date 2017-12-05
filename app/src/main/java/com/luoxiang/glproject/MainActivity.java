@@ -5,13 +5,14 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.luoxiang.glproject.surfaces.RotateSurfaceView;
+import com.luoxiang.glproject.surfaces.ScaleSurfaceView;
 import com.luoxiang.glproject.surfaces.TranslationSurfaceView;
 
 public class MainActivity
         extends AppCompatActivity
 {
     //surfaceview
-    private RotateSurfaceView mSurfaceView;
+    private ScaleSurfaceView mSurfaceView;
 
 
     @Override
@@ -20,7 +21,7 @@ public class MainActivity
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
-        mSurfaceView = new RotateSurfaceView(this);
+        mSurfaceView = new ScaleSurfaceView(this);
 
 
         mSurfaceView.requestFocus();
