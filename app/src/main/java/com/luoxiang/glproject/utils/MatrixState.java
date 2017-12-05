@@ -8,7 +8,7 @@ import android.opengl.Matrix;
  * className:	        MatrixState
  * author:	            Luoxiang
  * time:	            2017/11/29	10:48
- * desc:	            TODO
+ * desc:	            管理系统变换矩阵的类
  *
  * svnVersion:	        $Rev
  * upDateAuthor:	    Vincent
@@ -20,11 +20,54 @@ import android.opengl.Matrix;
 public class MatrixState {
 
     //4X4的投影矩阵
-    public static float[] mProjMatrix = new float[16];
+    private static float[] mProjMatrix = new float[16];
     //摄像机位置朝向的参数矩阵
-    public static float[] mVMatrix    = new float[16];
+    private static float[] mVMatrix    = new float[16];
     //总变换矩阵
-    public static float[] mMVPMatrix;
+    private static float[] mMVPMatrix;
+    //当前变换矩阵
+    private static float[] currMatrix;
+    //用于保存变换矩阵的堆栈
+    static float[][] mStack = new float[10][16];
+    //栈顶索引
+    static int stackTop = -1;
+
+    //产生无任何变化的初始化矩阵
+    public static void setInitStack(){
+        currMatrix = new float[16];
+        Matrix.setRotateM(currMatrix , 0 , 0 ,1 ,0 ,0);
+    }
+
+    /**
+     * 将当前的变化矩阵入栈
+     */
+    public static void pushMatrix(){
+        stackTop++;
+        for (int i = 0; i < 16; i++) {
+            mStack[stackTop][i] = currMatrix[i];
+        }
+    }
+
+    /**
+     * 取出当前栈顶的矩阵
+     */
+    public static void popMatrix(){
+        for (int i = 0; i < 16; i++) {
+           currMatrix[i] = mStack[stackTop][i] ;
+        }
+        stackTop--;
+    }
+
+    /**
+     * 平移
+     * @param x
+     * @param y
+     * @param z
+     */
+    public static void translate(float x , float y , float z){
+        Matrix.translateM(currMatrix , 0 , x , y , z);
+    }
+
 
     /**
      * 设置正交投影
@@ -102,6 +145,18 @@ public class MatrixState {
          * rhsOffset + 16 > rhs.length.
          */
         Matrix.multiplyMM(mMVPMatrix , 0 , mVMatrix , 0 , spec , 0);
+        Matrix.multiplyMM(mMVPMatrix , 0 , mProjMatrix , 0 , mMVPMatrix , 0);
+        return mMVPMatrix;
+    }
+
+    /**
+     * 计算产生总变换矩阵
+     * @return 总变换矩阵
+     */
+    public static float[] getFinalMatrix(){
+        //摄像机矩阵乘以变换矩阵
+        Matrix.multiplyMM(mMVPMatrix , 0 , mVMatrix , 0 , currMatrix , 0);
+        //投影矩阵乘以上一步的结果矩阵
         Matrix.multiplyMM(mMVPMatrix , 0 , mProjMatrix , 0 , mMVPMatrix , 0);
         return mMVPMatrix;
     }

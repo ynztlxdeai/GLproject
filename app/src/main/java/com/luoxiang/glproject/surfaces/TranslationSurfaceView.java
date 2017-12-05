@@ -5,6 +5,9 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 
+import com.luoxiang.glproject.domain.Cube;
+import com.luoxiang.glproject.utils.MatrixState;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -54,6 +57,8 @@ public class TranslationSurfaceView extends GLSurfaceView {
     private class SceneRenderer
             implements GLSurfaceView.Renderer
     {
+        //立方体的引用对象
+        Cube mCube;
 
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
@@ -67,6 +72,9 @@ public class TranslationSurfaceView extends GLSurfaceView {
 
         @Override
         public void onDrawFrame(GL10 gl) {
+            //清楚深度和颜色缓冲
+            GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
+            //绘制原来的立方体
 
         }
     }
