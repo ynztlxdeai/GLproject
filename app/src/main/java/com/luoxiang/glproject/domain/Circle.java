@@ -76,8 +76,8 @@ public class Circle {
         for (float angleTemp = 0; Math.ceil(angleTemp) <= 360 ; angleTemp += angleSpan) {
             double angrad = Math.toRadians(angleTemp);
 
-            vertices[count++] = (float)(-Constant.UNIT_SIZE * Math.sin(angleTemp));
-            vertices[count++] = (float)(Constant.UNIT_SIZE * Math.cos(angleTemp));
+            vertices[count++] = (float)(-Constant.UNIT_SIZE * Math.sin(angrad));
+            vertices[count++] = (float)(Constant.UNIT_SIZE * Math.cos(angrad));
             vertices[count++] = 0;
         }
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);

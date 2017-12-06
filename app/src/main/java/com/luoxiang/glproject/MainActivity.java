@@ -4,13 +4,13 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.luoxiang.glproject.surfaces.PointLineSurfaceView;
+import com.luoxiang.glproject.surfaces.BeltCircleSurfaceView;
 
 public class MainActivity
         extends AppCompatActivity
 {
     //surfaceview
-    private PointLineSurfaceView mSurfaceView;
+    private BeltCircleSurfaceView mSurfaceView;
 
 
     @Override
@@ -19,7 +19,7 @@ public class MainActivity
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
-        mSurfaceView = new PointLineSurfaceView(this);
+        mSurfaceView = new BeltCircleSurfaceView(this);
 
 
         mSurfaceView.requestFocus();

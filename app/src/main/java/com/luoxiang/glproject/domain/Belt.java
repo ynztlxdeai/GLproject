@@ -72,12 +72,12 @@ public class Belt {
         int count = 0;
         for (float angleTemp = angleBegin ; angleTemp <= angleEnd ; angleTemp += angleSpan) {
             double angrad = Math.toRadians(angleTemp);
-            vertices[count++] = (float)(-0.6f + Constant.UNIT_SIZE * Math.sin(angleTemp));
-            vertices[count++] = (float)(0.6f + Constant.UNIT_SIZE * Math.cos(angleTemp));
+            vertices[count++] = (float)(-0.6f * Constant.UNIT_SIZE * Math.sin(angrad));
+            vertices[count++] = (float)(0.6f * Constant.UNIT_SIZE * Math.cos(angrad));
             vertices[count++] = 0f ;
 
-            vertices[count++] = (float)(-Constant.UNIT_SIZE * Math.sin(angleTemp));
-            vertices[count++] = (float)(Constant.UNIT_SIZE * Math.cos(angleTemp));
+            vertices[count++] = (float)(-Constant.UNIT_SIZE * Math.sin(angrad));
+            vertices[count++] = (float)(Constant.UNIT_SIZE * Math.cos(angrad));
             vertices[count++] = 0f ;
         }
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
