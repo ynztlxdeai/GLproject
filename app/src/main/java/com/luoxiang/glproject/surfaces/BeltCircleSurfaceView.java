@@ -57,19 +57,24 @@ public class BeltCircleSurfaceView extends GLSurfaceView {
             //清除深度缓冲与颜色缓冲
             GLES20.glClear( GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
             //保护现场
-            MatrixState.pushMatrix();
+           // MatrixState.pushMatrix();
+
+
             //绘制条状物
             MatrixState.pushMatrix();
             MatrixState.translate(-1.3f, 0, 0);//沿x方向平移
             belt.drawSelf();
             MatrixState.popMatrix();
-            //绘制圆
+
+          /*  //绘制圆
             MatrixState.pushMatrix();
             MatrixState.translate(1.3f, 0, 0);//沿x方向平移
             circle.drawSelf();
             MatrixState.popMatrix();
+
+
             //恢复现场
-            MatrixState.popMatrix();
+            MatrixState.popMatrix();*/
         }
 
         public void onSurfaceChanged(GL10 gl, int width, int height) {

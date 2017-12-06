@@ -41,10 +41,13 @@ public class Belt {
 
     public Belt(Context context){
         //初始化顶点坐标与着色数据
-        initVertexData();
+        //initVertexData();
+        initVertexDataTwo();
         //初始化shader
         initShader(context);
     }
+
+
 
     private void initShader(Context context) {
         //加载顶点着色器的脚本内容
@@ -80,6 +83,78 @@ public class Belt {
             vertices[count++] = (float)(Constant.UNIT_SIZE * Math.cos(angrad));
             vertices[count++] = 0f ;
         }
+        ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
+        vbb.order(ByteOrder.nativeOrder());
+        mVertexBuffer = vbb.asFloatBuffer();
+        mVertexBuffer.put(vertices).position(0);
+
+        count = 0;
+        float[] colors = new float[vCount * 4];
+        for (int i = 0; i < colors.length; i += 8) {
+            colors[count++] = 1;
+            colors[count++] = 1;
+            colors[count++] = 1;
+            colors[count++] = 0;
+
+            colors[count++] = 0;
+            colors[count++] = 1;
+            colors[count++] = 1;
+            colors[count++] = 0;
+        }
+        ByteBuffer cbb = ByteBuffer.allocateDirect(colors.length * 4);
+        cbb.order(ByteOrder.nativeOrder());
+        mColorBuffer = cbb.asFloatBuffer();
+        mColorBuffer.put(colors).position(0);
+    }
+
+    private void initVertexDataTwo() {
+        int n1 = 3;
+        int n2 = 5;
+        vCount = 2 * (n1 + n2 + 2) + 2;
+        float angleBegin1 = 0;
+        float angleEnd1 = 90;
+        float angleSpan1 = (angleEnd1 - angleBegin1) / n1;
+
+        float angleBegin2 = 180;
+        float angleEnd2 = 270;
+        float angleSpan2 = (angleEnd2 - angleBegin2) / n2;
+
+        float[] vertices = new float[vCount * 3];
+        int count = 0;
+        for (float angleTemp = angleBegin1 ; angleTemp <= angleEnd1 ; angleTemp += angleSpan1) {
+            double angrad = Math.toRadians(angleTemp);
+            vertices[count++] = (float)(-0.6f * Constant.UNIT_SIZE * Math.sin(angrad));
+            vertices[count++] = (float)(0.6f * Constant.UNIT_SIZE * Math.cos(angrad));
+            vertices[count++] = 0f ;
+
+            vertices[count++] = (float)(-Constant.UNIT_SIZE * Math.sin(angrad));
+            vertices[count++] = (float)(Constant.UNIT_SIZE * Math.cos(angrad));
+            vertices[count++] = 0f ;
+        }
+        //重复第一批三角形的最后一个顶点
+        vertices[count++] = vertices[count -4];
+        vertices[count++] = vertices[count -4];
+        vertices[count++] = 0;
+
+        for (float angleTemp = angleBegin2 ; angleTemp <= angleEnd2 ; angleTemp += angleSpan2) {
+            double angrad = Math.toRadians(angleTemp);
+
+            //重复第二批三角形第一个顶点
+            if (angleTemp == angleBegin2){
+                vertices[count++] = (float)(-0.6f * Constant.UNIT_SIZE * Math.sin(angrad));
+                vertices[count++] = (float)(0.6f * Constant.UNIT_SIZE * Math.cos(angrad));
+                vertices[count++] = 0f ;
+            }
+
+            vertices[count++] = (float)(-0.6f * Constant.UNIT_SIZE * Math.sin(angrad));
+            vertices[count++] = (float)(0.6f * Constant.UNIT_SIZE * Math.cos(angrad));
+            vertices[count++] = 0f ;
+
+            vertices[count++] = (float)(-Constant.UNIT_SIZE * Math.sin(angrad));
+            vertices[count++] = (float)(Constant.UNIT_SIZE * Math.cos(angrad));
+            vertices[count++] = 0f ;
+        }
+
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
         vbb.order(ByteOrder.nativeOrder());
         mVertexBuffer = vbb.asFloatBuffer();
