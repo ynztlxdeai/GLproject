@@ -133,7 +133,7 @@ public class Belt {
         //允许顶点位置数据数组
         GLES20.glEnableVertexAttribArray(maPositionHandle);
         GLES20.glEnableVertexAttribArray(maColorHandle);
-
+        //采用三角形条带方式绘制
         GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP,0, vCount);
     }
 }
