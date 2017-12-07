@@ -2,6 +2,10 @@ package com.luoxiang.glproject.utils;
 
 import android.opengl.Matrix;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+
 /**
  * projectName: 	    GLhexagram
  * packageName:	        com.luoxiang.glhexagram
@@ -31,6 +35,31 @@ public class MatrixState {
     static float[][] mStack = new float[10][16];
     //栈顶索引
     static int stackTop = -1;
+    //光源位置数组
+    private static float[] lightLocation = new float[]{0,0,0};
+    //光源位置缓冲
+    public static FloatBuffer lightPositionFB;
+    //待用的字节缓冲
+    static ByteBuffer llbbL = ByteBuffer.allocateDirect(3 * 4);
+
+    /**
+     * 设置光源的位置
+     * @param x
+     * @param y
+     * @param z
+     */
+    public static void setLightLocation(float x , float y , float z){
+        llbbL.clear();
+        lightLocation[0] = x;
+        lightLocation[1] = y;
+        lightLocation[2] = z;
+
+        llbbL.order(ByteOrder.nativeOrder());
+        lightPositionFB = llbbL.asFloatBuffer();
+        lightPositionFB.put(lightLocation).position(0);
+
+    }
+
 
     //产生无任何变化的初始化矩阵
     public static void setInitStack(){
