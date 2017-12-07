@@ -1,6 +1,9 @@
 package com.luoxiang.glproject.domain;
 
 import android.content.Context;
+import android.opengl.GLES20;
+
+import com.luoxiang.glproject.utils.MatrixState;
 
 import java.nio.FloatBuffer;
 
@@ -48,6 +51,30 @@ public class Triangle {
     }
 
     public void drawSelf(int texId){
+        GLES20.glUseProgram(mProgram);
+        MatrixState.setInitStack();
+        //Z轴移动1
+        MatrixState.translate(0,0,1);
+
+        MatrixState.rotate(yAngle , 0 , 1 , 0);
+        MatrixState.rotate(zAngle , 0 , 0 , 1);
+        MatrixState.rotate(xAngle , 1 , 0 , 1);
+
+        //最终变换矩阵传给渲染管线
+        GLES20.glUniformMatrix4fv(muMVPMatrixHandle , 1 , false , MatrixState.getFinalMatrix() , 0);
+
+        GLES20.glVertexAttribPointer(maPositionHandle , 3 , GLES20.GL_FLOAT , false , 3 *4 , mVertexBuffer);
+        GLES20.glVertexAttribPointer(maTexCoorHandle , 2 , GLES20.GL_FLOAT , false , 2 *4 , mTexCoorBuffer);
+
+        GLES20.glEnableVertexAttribArray(maPositionHandle);
+        GLES20.glEnableVertexAttribArray(maTexCoorHandle);
+
+        //设置使用纹理编号
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        //绑定指定纹理id
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D , texId);
+
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES , 0 , vCount);
 
     }
 }

@@ -1,11 +1,18 @@
 package com.luoxiang.glproject.surfaces;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLUtils;
 import android.util.AttributeSet;
 
+import com.luoxiang.glproject.R;
 import com.luoxiang.glproject.domain.Triangle;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -49,8 +56,11 @@ public class TextureSurfaceView extends GLSurfaceView {
         Triangle mTriangle;
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-            GLES20.glClearColor(0,0,0,0);
+            GLES20.glClearColor(0.5f,0.5f,0.5f,1.0f);
             mTriangle = new Triangle(getContext());
+            GLES20.glEnable(GLES20.GL_DEPTH_TEST);
+            initTexture();
+            GLES20.glDisable(GLES20.GL_CULL_FACE);
         }
 
         @Override
@@ -63,5 +73,51 @@ public class TextureSurfaceView extends GLSurfaceView {
             GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
             mTriangle.drawSelf(mTextureId);
         }
+    }
+
+    private void initTexture() {
+        //生成纹理id
+        int[] textures = new int[1];
+        /**
+         * 生成纹理的数量1
+         * 生成纹理id的数组
+         * 生成纹理id的偏移量0
+         */
+        GLES20.glGenTextures(1 , textures , 0);
+        mTextureId = textures[0];
+        //绑定纹理id
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D , mTextureId);
+        //设置min采样方式
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D , GLES20.GL_TEXTURE_MIN_FILTER , GLES20.GL_NEAREST);
+        //MAG采样方式
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D , GLES20.GL_TEXTURE_MAG_FILTER , GLES20.GL_LINEAR);
+        //设置S轴拉伸方式
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D , GLES20.GL_TEXTURE_WRAP_S , GLES20.GL_CLAMP_TO_EDGE);
+        //设置T轴拉伸样式
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D , GLES20.GL_TEXTURE_WRAP_T , GLES20.GL_CLAMP_TO_EDGE);
+
+        //通过流载入图片
+        InputStream inputStream = getResources().openRawResource(R.mipmap.wall);
+        Bitmap bitmapTmp        = null;
+        try {
+            bitmapTmp = BitmapFactory.decodeStream(inputStream);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        /**
+         * 加载纹理进入显存
+         * GLES20.GL_TEXTURE_2D纹理类型
+         * 纹理层次0,0表示基本图像层,可以理解为直接贴图
+         * bitmapTmp纹理图片
+         * 纹理边框0
+         */
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D , 0 , bitmapTmp , 0);
+        bitmapTmp.recycle();
     }
 }
