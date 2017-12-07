@@ -3,9 +3,12 @@ package com.luoxiang.glproject.domain;
 import android.content.Context;
 import android.opengl.GLES20;
 
+import com.luoxiang.glproject.Constant;
 import com.luoxiang.glproject.utils.MatrixState;
 import com.luoxiang.glproject.utils.ShaderUtil;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 /**
@@ -33,7 +36,7 @@ public class Circle2 {
 
     FloatBuffer mVertexBuffer;//顶点坐标数据缓冲
     FloatBuffer mColorBuffer;//顶点着色数据缓冲
-    FloatBuffer mIndexBuffer;//索引缓冲
+    ByteBuffer mIndexBuffer;//索引缓冲
 
     int vCount=0;
     int iCount=0;
@@ -47,7 +50,52 @@ public class Circle2 {
     }
 
     private void initVertexData() {
+        int n = 10;
+        vCount = n + 2;
+        float angleSpan = 360f / n;
+        float[] vertices = new float[vCount * 3];
+        int count = 0;
 
+        vertices[count++] = 0;
+        vertices[count++] = 0;
+        vertices[count++] = 0;
+
+        for (float angleTemp = 0; Math.ceil(angleTemp) <= 360 ; angleTemp += angleSpan) {
+            double angrad = Math.toRadians(angleTemp);
+            vertices[count++] = (float)(-Constant.UNIT_SIZE * Math.sin(angrad));
+            vertices[count++] = (float)(Constant.UNIT_SIZE * Math.cos(angrad));
+            vertices[count++] = 0;
+        }
+        ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
+        vbb.order(ByteOrder.nativeOrder());
+        mVertexBuffer = vbb.asFloatBuffer();
+        mVertexBuffer.put(vertices).position(0);
+
+        iCount = vCount;
+        //索引序列
+        byte[] indices = new byte[iCount];
+        for (int i = 0; i < iCount; i++) {
+            indices[i] = (byte)i;
+        }
+        mIndexBuffer = ByteBuffer.allocateDirect(indices.length);
+        mIndexBuffer.put(indices).position(0);
+
+        float[] colors = new float[vCount * 4];
+        count = 0;
+        colors[count++] = 1;
+        colors[count++] = 1;
+        colors[count++] = 1;
+        colors[count++] = 0;
+        for (int i = 4; i < colors.length; i += 4) {
+            colors[count++] = 0;
+            colors[count++] = 1;
+            colors[count++] = 0;
+            colors[count++] = 0;
+        }
+        ByteBuffer cbb = ByteBuffer.allocateDirect(colors.length * 4);
+        cbb.order(ByteOrder.nativeOrder());
+        mColorBuffer = cbb.asFloatBuffer();
+        mColorBuffer.put(colors).position(0);
     }
 
     private void initShader(Context context) {

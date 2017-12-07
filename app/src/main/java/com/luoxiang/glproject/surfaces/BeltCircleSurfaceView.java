@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import com.luoxiang.glproject.Constant;
 import com.luoxiang.glproject.domain.Belt;
 import com.luoxiang.glproject.domain.Circle;
+import com.luoxiang.glproject.domain.Circle2;
 import com.luoxiang.glproject.utils.MatrixState;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -51,6 +52,7 @@ public class BeltCircleSurfaceView extends GLSurfaceView {
     {
         Belt belt;//条状物
         Circle circle;//圆
+        Circle2 circle2;
 
         public void onDrawFrame(GL10 gl)
         {
@@ -63,7 +65,12 @@ public class BeltCircleSurfaceView extends GLSurfaceView {
             //绘制条状物
             MatrixState.pushMatrix();
             MatrixState.translate(-1.3f, 0, 0);//沿x方向平移
-            belt.drawSelf();
+
+
+//            belt.drawSelf();
+            //
+            circle2.drawSelf();
+
             MatrixState.popMatrix();
 
           /*  //绘制圆
@@ -98,6 +105,7 @@ public class BeltCircleSurfaceView extends GLSurfaceView {
             circle=new Circle(mContext);
             //创建条状物对象
             belt=new Belt(mContext);
+            circle2 = new Circle2(mContext);
             //打开深度检测
             GLES20.glEnable(GLES20.GL_DEPTH_TEST);
             //打开背面剪裁
