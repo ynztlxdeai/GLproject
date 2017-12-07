@@ -4,7 +4,10 @@ import android.content.Context;
 import android.opengl.GLES20;
 
 import com.luoxiang.glproject.utils.MatrixState;
+import com.luoxiang.glproject.utils.ShaderUtil;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 /**
@@ -33,9 +36,9 @@ public class Triangle {
     FloatBuffer mTexCoorBuffer;//顶点纹理坐标数据缓冲
 
     int vCount;
-    float xAngle;
-    float yAngle;
-    float zAngle;
+    public float xAngle;
+    public float yAngle;
+    public float zAngle;
 
     public Triangle(Context context){
         initVertexData();
@@ -43,11 +46,39 @@ public class Triangle {
     }
 
     private void initShader(Context context) {
+        mVertexShader = ShaderUtil.loadFromAssetsFile("vertex_texture.sh" , context.getResources());
 
+        mFragShader = ShaderUtil.loadFromAssetsFile("frag_texture.sh" , context.getResources());
+
+        mProgram = ShaderUtil.createProgram(mVertexShader , mFragShader);
+
+        maPositionHandle = GLES20.glGetAttribLocation(mProgram , "aPosition");
+        maTexCoorHandle = GLES20.glGetAttribLocation(mProgram , "aTexCoor");
+        muMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram , "uMVPMatrix");
     }
 
     private void initVertexData() {
+        vCount = 3;
+        final float UNIT_SIZE = 0.15F;
+        float[] vertices = new float[]{
+                0 * UNIT_SIZE , 11 * UNIT_SIZE , 0,
+                -11* UNIT_SIZE , -11 * UNIT_SIZE , 0,
+                11 * UNIT_SIZE , -11 * UNIT_SIZE , 0,
+        };
+        ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
+        vbb.order(ByteOrder.nativeOrder());
+        mVertexBuffer = vbb.asFloatBuffer();
+        mVertexBuffer.put(vertices).position(0);
 
+        float[] texCoor = new float[]{
+                0.5f , 0,
+                0,1,
+                1,1
+        };
+        ByteBuffer cbb = ByteBuffer.allocateDirect(texCoor.length *4);
+        cbb.order(ByteOrder.nativeOrder());
+        mTexCoorBuffer = cbb.asFloatBuffer();
+        mTexCoorBuffer.put(texCoor).position(0);
     }
 
     public void drawSelf(int texId){

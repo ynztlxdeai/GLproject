@@ -7,9 +7,11 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLUtils;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 
 import com.luoxiang.glproject.R;
 import com.luoxiang.glproject.domain.Triangle;
+import com.luoxiang.glproject.utils.MatrixState;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,6 +37,9 @@ public class TextureSurfaceView extends GLSurfaceView {
     private SceneRenderer mRenderer;
     //纹理ID
     int mTextureId;
+    private final float TOUCH_SCALE_FACTOR = 180.0f/320;//角度缩放比例
+    private float mPreviousY;//上次的触控位置Y坐标
+    private float mPreviousX;//上次的触控位置X坐标
 
     public TextureSurfaceView(Context context) {
         this(context,null);
@@ -52,6 +57,23 @@ public class TextureSurfaceView extends GLSurfaceView {
         setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
+    //触摸事件回调方法
+    @Override
+    public boolean onTouchEvent(MotionEvent e) {
+        float y = e.getY();
+        float x = e.getX();
+        switch (e.getAction()) {
+            case MotionEvent.ACTION_MOVE:
+                float dy = y - mPreviousY;//计算触控笔Y位移
+                float dx = x - mPreviousX;//计算触控笔X位移
+                mRenderer.mTriangle.yAngle += dx * TOUCH_SCALE_FACTOR;//设置纹理矩形绕y轴旋转角度
+                mRenderer.mTriangle.zAngle+= dy * TOUCH_SCALE_FACTOR;//设置第纹理矩形绕z轴旋转角度
+        }
+        mPreviousY = y;//记录触控笔位置
+        mPreviousX = x;//记录触控笔位置
+        return true;
+    }
+
     class SceneRenderer implements GLSurfaceView.Renderer{
         Triangle mTriangle;
         @Override
@@ -65,7 +87,14 @@ public class TextureSurfaceView extends GLSurfaceView {
 
         @Override
         public void onSurfaceChanged(GL10 gl, int width, int height) {
-            GLES20.glViewport(0 , 0 , width , height);
+            //设置视窗大小及位置
+            GLES20.glViewport(0, 0, width, height);
+            //计算GLSurfaceView的宽高比
+            float ratio = (float) width / height;
+            //调用此方法计算产生透视投影矩阵
+            MatrixState.setProjectFrustum(-ratio, ratio, -1, 1, 1, 10);
+            //调用此方法产生摄像机9参数位置矩阵
+            MatrixState.setCamera(0,0,3,0f,0f,0f,0f,1.0f,0.0f);
         }
 
         @Override

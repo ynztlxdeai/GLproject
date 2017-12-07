@@ -4,13 +4,13 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.luoxiang.glproject.surfaces.BeltCircleSurfaceView;
+import com.luoxiang.glproject.surfaces.TextureSurfaceView;
 
 public class MainActivity
         extends AppCompatActivity
 {
     //surfaceview
-    private BeltCircleSurfaceView mSurfaceView;
+    private TextureSurfaceView mSurfaceView;
 
 
     @Override
@@ -19,7 +19,7 @@ public class MainActivity
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
-        mSurfaceView = new BeltCircleSurfaceView(this);
+        mSurfaceView = new TextureSurfaceView(this);
 
 
         mSurfaceView.requestFocus();
