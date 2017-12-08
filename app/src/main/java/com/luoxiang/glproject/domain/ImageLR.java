@@ -3,9 +3,14 @@ package com.luoxiang.glproject.domain;
 import android.content.Context;
 import android.opengl.GLES20;
 
+import com.luoxiang.glproject.utils.MatrixState;
 import com.luoxiang.glproject.utils.ShaderUtil;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+
+import static com.luoxiang.glproject.Constant.UNIT_SIZE;
 
 /**
  * projectName: 	    GLproject
@@ -40,6 +45,20 @@ public class ImageLR {
     }
 
     private void initVertexData() {
+        vCount = 6;
+        float[] vertices = new float[]{
+                    0,0,0,
+                    1,0,0,
+                    0,1,0,
+                    1,0,0,
+                    1,1,0,
+                    0,1,0
+                };
+        ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
+        vbb.order(ByteOrder.nativeOrder());
+        mVertexBuffer = vbb.asFloatBuffer();
+        mVertexBuffer.put(vertices).position(0);
+
 
     }
 
@@ -56,6 +75,23 @@ public class ImageLR {
     }
 
     public void drawSelf(int textureId) {
+        GLES20.glUseProgram(mProgram);
+        MatrixState.setInitStack();
 
+        //最终变换矩阵传给渲染管线
+        GLES20.glUniformMatrix4fv(muMVPMatrixHandle , 1 , false , MatrixState.getFinalMatrix() , 0);
+
+        GLES20.glVertexAttribPointer(maPositionHandle , 3 , GLES20.GL_FLOAT , false , 3 *4 , mVertexBuffer);
+        GLES20.glVertexAttribPointer(maTexCoorHandle , 2 , GLES20.GL_FLOAT , false , 2 *4 , mTexCoorBuffer);
+
+        GLES20.glEnableVertexAttribArray(maPositionHandle);
+        GLES20.glEnableVertexAttribArray(maTexCoorHandle);
+
+        //设置使用纹理编号
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+        //绑定指定纹理id
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D , textureId);
+
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES , 0 , vCount);
     }
 }
