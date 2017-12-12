@@ -3,6 +3,7 @@ package com.luoxiang.glproject.domain;
 import android.content.Context;
 import android.opengl.GLES20;
 
+import com.luoxiang.glproject.Constant;
 import com.luoxiang.glproject.utils.MatrixState;
 import com.luoxiang.glproject.utils.ShaderUtil;
 
@@ -47,19 +48,30 @@ public class ImageLR {
     private void initVertexData() {
         vCount = 6;
         float[] vertices = new float[]{
-                    0,0,0,
-                    1,0,0,
-                    0,1,0,
-                    1,0,0,
-                    1,1,0,
-                    0,1,0
+                   -4* Constant.UNIT_SIZE , 4*Constant.UNIT_SIZE,0,
+                   -4* Constant.UNIT_SIZE , -4*Constant.UNIT_SIZE,0,
+                   4* Constant.UNIT_SIZE , -4*Constant.UNIT_SIZE,0,
+                   4* Constant.UNIT_SIZE , -4*Constant.UNIT_SIZE,0,
+                   4* Constant.UNIT_SIZE , 4*Constant.UNIT_SIZE,0,
+                   -4* Constant.UNIT_SIZE , 4*Constant.UNIT_SIZE,0,
                 };
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
         vbb.order(ByteOrder.nativeOrder());
         mVertexBuffer = vbb.asFloatBuffer();
         mVertexBuffer.put(vertices).position(0);
 
-
+        float[] texCoor = new float[]{
+                0,0,
+               0,1,
+               1,1,
+                1,1,
+                1,0,
+                0,0
+        };
+        ByteBuffer cbb = ByteBuffer.allocateDirect(texCoor.length *4);
+        cbb.order(ByteOrder.nativeOrder());
+        mTexCoorBuffer = cbb.asFloatBuffer();
+        mTexCoorBuffer.put(texCoor).position(0);
     }
 
     private void initShader(Context context) {
