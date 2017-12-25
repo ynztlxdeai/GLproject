@@ -11,22 +11,20 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import static com.luoxiang.glproject.Constant.UNIT_SIZE;
-
 /**
  * projectName: 	    GLproject
  * packageName:	        com.luoxiang.glproject.domain
- * className:	        ImageLR
+ * className:	        ImageAngle
  * author:	            Luoxiang
- * time:	            2017/12/8	9:30
+ * time:	            2017/12/25	8:58
  * desc:	            TODO
  *
  * svnVersion:	        $Rev
  * upDateAuthor:	    Vincent
- * upDate:	            2017/12/8
+ * upDate:	            2017/12/25
  * upDateDesc:	        TODO
  */
-public class ImageLR {
+public class ImageAngle {
     int mProgram;//着色器程序id
     int muMVPMatrixHandle;//总变换矩阵引用
     int maPositionHandle;//顶点位置引用
@@ -40,31 +38,21 @@ public class ImageLR {
 
     int vCount;
 
-    public ImageLR(Context context){
+    public ImageAngle(Context context){
         initVertexData();
         initShader(context);
     }
 
     private void initVertexData() {
         vCount = 6;
-  /*      float[] vertices = new float[]{
-                   -4* Constant.UNIT_SIZE , 4*Constant.UNIT_SIZE,0,
-                   -4* Constant.UNIT_SIZE , -4*Constant.UNIT_SIZE,0,
-                   4* Constant.UNIT_SIZE , -4*Constant.UNIT_SIZE,0,
-                   4* Constant.UNIT_SIZE , -4*Constant.UNIT_SIZE,0,
-                   4* Constant.UNIT_SIZE , 4*Constant.UNIT_SIZE,0,
-                   -4* Constant.UNIT_SIZE , 4*Constant.UNIT_SIZE,0,
-                };*/
-
         float[] vertices = new float[]{
-                -4.7f* Constant.UNIT_SIZE , 9*Constant.UNIT_SIZE,0,
-                -4.7f* Constant.UNIT_SIZE , -9*Constant.UNIT_SIZE,0,
-                4.7f* Constant.UNIT_SIZE , -9*Constant.UNIT_SIZE,0,
-                4.7f* Constant.UNIT_SIZE , -9*Constant.UNIT_SIZE,0,
-                4.7f* Constant.UNIT_SIZE , 9*Constant.UNIT_SIZE,0,
-                -4.7f* Constant.UNIT_SIZE , 9*Constant.UNIT_SIZE,0,
+                -4* Constant.UNIT_SIZE , 4*Constant.UNIT_SIZE, 0,
+                -4* Constant.UNIT_SIZE , -4*Constant.UNIT_SIZE, 0,
+                4* Constant.UNIT_SIZE , -4*Constant.UNIT_SIZE, 0,
+                4* Constant.UNIT_SIZE , -4*Constant.UNIT_SIZE, 0,
+                4* Constant.UNIT_SIZE , 4*Constant.UNIT_SIZE, 0,
+                -4* Constant.UNIT_SIZE , 4*Constant.UNIT_SIZE, 0,
                 };
-
         ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
         vbb.order(ByteOrder.nativeOrder());
         mVertexBuffer = vbb.asFloatBuffer();
@@ -72,8 +60,8 @@ public class ImageLR {
 
         float[] texCoor = new float[]{
                 0,0,
-               0,1,
-               1,1,
+                0,1,
+                1,1,
                 1,1,
                 1,0,
                 0,0
@@ -85,9 +73,9 @@ public class ImageLR {
     }
 
     private void initShader(Context context) {
-        mVertexShader = ShaderUtil.loadFromAssetsFile("vertex_img.sh" , context.getResources());
+        mVertexShader = ShaderUtil.loadFromAssetsFile("vertex_angle.sh" , context.getResources());
 
-        mFragShader = ShaderUtil.loadFromAssetsFile("frag_img.sh" , context.getResources());
+        mFragShader = ShaderUtil.loadFromAssetsFile("frag_angle.sh" , context.getResources());
 
         mProgram = ShaderUtil.createProgram(mVertexShader , mFragShader);
 
