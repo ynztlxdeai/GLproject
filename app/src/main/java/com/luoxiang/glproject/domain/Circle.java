@@ -129,6 +129,7 @@ public class Circle {
                         mColorBuffer
                 );
         //允许顶点位置数据数组
+
         GLES20.glEnableVertexAttribArray(maPositionHandle);
         GLES20.glEnableVertexAttribArray(maColorHandle);
         //采用三角形扇面方式绘制
