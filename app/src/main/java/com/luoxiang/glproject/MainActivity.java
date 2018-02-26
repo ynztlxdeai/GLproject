@@ -6,12 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.luoxiang.glproject.surfaces.TextureImgSurfaceView;
 import com.luoxiang.glproject.surfaces.TextureSurfaceView;
+import com.luoxiang.glproject.surfaces.TranslationSurfaceView;
 
 public class MainActivity
         extends AppCompatActivity
 {
     //surfaceview
-    private TextureImgSurfaceView mSurfaceView;
+    private TranslationSurfaceView mSurfaceView;
 
 
     @Override
@@ -20,7 +21,7 @@ public class MainActivity
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
-        mSurfaceView = new TextureImgSurfaceView(this);
+        mSurfaceView = new TranslationSurfaceView(this);
 
 
         mSurfaceView.requestFocus();
