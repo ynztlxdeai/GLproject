@@ -25,8 +25,6 @@ import javax.microedition.khronos.opengles.GL10;
  * upDate:	            2017/11/30
  * upDateDesc:	        TODO
  */
-
-
 public class ScaleSurfaceView
         extends GLSurfaceView {
 
