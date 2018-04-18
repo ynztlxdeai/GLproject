@@ -3,6 +3,7 @@ package com.luoxiang.glproject.domain;
 import android.content.Context;
 import android.opengl.GLES20;
 
+import com.luoxiang.glproject.utils.MatrixState;
 import com.luoxiang.glproject.utils.ShaderUtil;
 
 import java.nio.ByteBuffer;
@@ -116,6 +117,10 @@ public class Ball {
 
     public void drawSelf(){
 
+        //指定shader程序
+        GLES20.glUseProgram(mProgram);
+        //将最终的变换矩阵传入shader程序
+        GLES20.glUniformMatrix4fv(muMVPMatrixHandle , 1 , false , MatrixState.getFinalMatrix(), 0);
 
         //半径传给渲染管线
         GLES20.glUniform1f(muRHandle , r * UNIT_SIZE);
