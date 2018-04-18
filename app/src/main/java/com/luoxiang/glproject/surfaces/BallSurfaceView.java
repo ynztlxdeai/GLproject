@@ -66,6 +66,7 @@ public class BallSurfaceView extends GLSurfaceView
             //重新设定窗口大小
             GLES20.glViewport(0 , 0 , width , height);
 
+
         }
 
         @Override
