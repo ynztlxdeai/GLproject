@@ -45,9 +45,9 @@ public class Ball {
     //顶点数量
     int vCount;
     //绕X Y Z 旋转的角度
-    float yAngle = 0;
-    float xAngle = 0;
-    float zAngle = 0;
+    public float yAngle = 0;
+    public float xAngle = 0;
+    public float zAngle = 0;
     //球半径
     float r = 0.8f;
 
