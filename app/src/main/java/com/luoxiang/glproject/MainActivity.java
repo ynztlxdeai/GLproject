@@ -4,15 +4,13 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.luoxiang.glproject.surfaces.TextureImgSurfaceView;
-import com.luoxiang.glproject.surfaces.TextureSurfaceView;
-import com.luoxiang.glproject.surfaces.TranslationSurfaceView;
+import com.luoxiang.glproject.surfaces.BallSurfaceView;
 
 public class MainActivity
         extends AppCompatActivity
 {
     //surfaceview
-    private TranslationSurfaceView mSurfaceView;
+    private BallSurfaceView mSurfaceView;
 
 
     @Override
@@ -21,7 +19,7 @@ public class MainActivity
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
-        mSurfaceView = new TranslationSurfaceView(this);
+        mSurfaceView = new BallSurfaceView(this);
 
 
         mSurfaceView.requestFocus();

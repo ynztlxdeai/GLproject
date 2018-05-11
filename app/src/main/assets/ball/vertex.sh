@@ -6,7 +6,7 @@ attribute vec3 aPosition;
 varying vec3 vPosition;
 void main(){
     //根据总变换矩阵计算当前的顶点位置
-    gl_Position = uMVPMatrix * vec4(aPsition , 1);
+    gl_Position = uMVPMatrix * vec4(aPosition , 1);
     //原始的顶点位置传递给片元着色器
      vPosition = aPosition;
 }

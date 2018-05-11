@@ -1,5 +1,5 @@
 //精度设置为中等
-precision medium float;
+precision mediump float;
 //球体的半径
 uniform float uR;
 //接收顶点着色器传递的顶点位置
@@ -20,7 +20,7 @@ void main(){
     int k = int((vPosition.z + uR) /span);
 
     //计算当前的片元 行 层 列数的和并且对2取模
-    int whichColor = int(mod((float)(i + k + j) , 2.0));
+    int whichColor = int(mod(float(i + k + j) , 2.0));
 
     if(whichColor == 1){
         //单数的时候为红色

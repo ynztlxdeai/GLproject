@@ -59,9 +59,9 @@ public class Ball {
 
     //顶点着色器和片元着色器加载
     private void initShader(Context context) {
-        mVertexShader = ShaderUtil.loadFromAssetsFile("/ball/vertex.sh" , context.getResources());
+        mVertexShader = ShaderUtil.loadFromAssetsFile("ball/vertex.sh" , context.getResources());
 
-        mFragmentShader = ShaderUtil.loadFromAssetsFile("/ball/fragment.sh" , context.getResources());
+        mFragmentShader = ShaderUtil.loadFromAssetsFile("ball/fragment.sh" , context.getResources());
 
         mProgram = ShaderUtil.createProgram(mVertexShader , mFragmentShader);
 
