@@ -31,7 +31,7 @@ import javax.microedition.khronos.opengles.GL10;
 public class BallSurfaceView
         extends GLSurfaceView
 {
-    final static float TOUCH_SCALE_FACTOR = 180F / 320;
+    final static float TOUCH_SCALE_FACTOR = 180.0f / 320;
     //场景渲染器
     SceneRenderer mRenderer;
     Context       mContext;
@@ -56,20 +56,23 @@ public class BallSurfaceView
         setEGLContextClientVersion(2);
         mRenderer = new SceneRenderer();
         setRenderer(mRenderer);
-        setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
     }
 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        float x = getX();
-        float y = getY();
-        if (event.getAction() == MotionEvent.ACTION_MOVE){
-            float dy = y - mPreviousY;
-            float dx = x - mPreviousX;
-
-            mBall.xAngle += dx * TOUCH_SCALE_FACTOR;
-            mBall.yAngle += dy * TOUCH_SCALE_FACTOR;
+        float x = event.getX();
+        float y = event.getY();
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_MOVE:
+                float dy = y - mPreviousY;
+                float dx = x - mPreviousX;
+                if (mBall != null){
+                    mBall.xAngle += dx * TOUCH_SCALE_FACTOR;
+                    mBall.yAngle += dy * TOUCH_SCALE_FACTOR;
+                }
+                //break;
         }
 
         mPreviousX = x;
@@ -86,7 +89,9 @@ public class BallSurfaceView
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-            mBall = new Ball(mContext);
+            if (null == mBall){
+                mBall = new Ball(mContext);
+            }
             //打开深度检测
             GLES20.glEnable(GLES20.GL_DEPTH_TEST);
             //打开卷绕
@@ -98,15 +103,13 @@ public class BallSurfaceView
             //重新设定窗口大小
             GLES20.glViewport(0, 0, width, height);
             //view的宽高比
-            Constant.ratio = (float)width / height;
+            Constant.ratio = (float) width / height;
 
             //产生透视投影矩阵
-            MatrixState.setProjectFrustum(-Constant.ratio , Constant.ratio , -1 ,
-                                          1 , 20 , 100);
+            MatrixState.setProjectFrustum(-Constant.ratio, Constant.ratio, -1, 1, 20, 100);
 
             //相机九参数矩阵
-            MatrixState.setCamera(0 , 0 , 30 , 0f , 0f , 0f
-            ,0.0f , 1.0f , 0.0f);
+            MatrixState.setCamera(0, 0, 30, 0f, 0f, 0f, 0.0f, 1.0f, 0.0f);
 
             MatrixState.setInitStack();
 

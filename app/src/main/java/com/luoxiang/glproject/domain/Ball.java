@@ -117,6 +117,9 @@ public class Ball {
 
     public void drawSelf(){
 
+        MatrixState.rotate(xAngle , 1 , 0 , 0);
+        MatrixState.rotate(yAngle , 0 , 1 , 0);
+        MatrixState.rotate(zAngle , 0 , 0 , 1);
         //指定shader程序
         GLES20.glUseProgram(mProgram);
         //将最终的变换矩阵传入shader程序
